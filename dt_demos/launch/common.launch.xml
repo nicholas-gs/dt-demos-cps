@@ -1,0 +1,124 @@
+<?xml version='1.0'?>
+<launch>
+	<arg name="veh"/>
+    <arg name="demo_name"/> 
+    <arg name="robot_type" default="$(env ROBOT_TYPE)"
+         description="The type of the robot (e.g., duckiebot, watchtower, traffic_light, ...)"/>
+    <arg name="robot_configuration" default="$(env ROBOT_CONFIGURATION)"
+         description="The configuration of the robot (e.g., DB19, DB20, WT18, ...)"/>
+	<!-- <arg name="config" default="baseline" />
+	<arg name="camera_topic" default="camera_node"/>
+	<arg name="param_file_name" default="default" />
+	<arg name="apriltags_param_file_name" default="$(arg param_file_name)" />
+	<arg name="fsm_file_name" default="$(arg demo_name)" />
+	<arg name="verbose" default="false" />
+	<arg name="ai_trafo_mode" default="cb" doc="'cb' for colo balance only; 'both' for color balance and linear trafo"/>
+	<arg name="ai_interval" default="5" doc="interval with which the linear trafo gets updated. color balance is performed every second."/>
+	<arg name="intersectionType" default= "stopSign"/> -->
+
+    <!-- FSM settings-->
+    <arg name="fsm" default="false"/>
+    <arg name="fsm_param_file_name" default="fsm_default"/>
+    <arg name="/fsm/logic_gate" default="false"/>
+    <arg name="logic_gate_param_file_name" default="logic_gate_default"/>
+
+    <!-- Lane following stack settings-->
+    <arg name="lane_following" default="false"/>
+    <arg name="/lane_following/line_detection" default="false"/>
+    <arg name="/lane_following/ground_projection" default="false"/>
+    <arg name="/lane_following/lane_filter" default="false"/>
+    <arg name="/lane_following/stop_line_filter" default="false"/>
+    <arg name="/lane_following/lane_controller" default="false"/>
+	<arg name="line_detector_param_file_name" default="default"/>
+	<arg name="ground_projection_param_file_name" default="default"/>
+    <arg name="lane_filter_param_file_name" default="default"/>
+    <arg name="stop_line_filter_param_file_name" default="default"/>
+    <arg name="lane_control_param_file_name" default="default"/>
+
+    <!-- Anti-instagram settings -->
+    <arg name="anti_instagram" default="false"/>
+    <arg name="anti_instagram_param_file_name" default="default"/>
+
+    <!-- FSM stack -->
+    <group if="$(var fsm)">
+
+        <include file="$(find-pkg-share fsm)/launch/fsm_node.launch.xml">
+            <arg name="veh" value="$(var veh)"/>
+            <arg name="param_file_name" value="$(var fsm_param_file_name)"/>
+        </include>
+
+        <group if="$(var /fsm/logic_gate)">
+            <include file="$(find-pkg-share fsm)/launch/logic_gate_node.launch.xml">
+                <arg name="veh" value="$(var veh)"/>
+                <arg name="param_file_name" value="$(var logic_gate_param_file_name)"/>
+            </include>
+        </group>
+
+    </group>
+
+    <!-- Lane following stack -->
+    <group if="$(var lane_following)">
+
+        <!-- Line/Lane Detector-->
+        <group if="$(var /lane_following/line_detection)">
+            <set_remap from="~/thresholds" to="/$(var veh)/anti_instagram_node/thresholds"/>
+            <set_remap from="~/image/compressed" to="/$(var veh)/camera_node/image_compressed"/>
+            <include file="$(find-pkg-share line_detector)/launch/line_detector_node.launch.xml">
+                <arg name="veh" value="$(var veh)"/>
+                <arg name="param_file_name" value="$(var line_detector_param_file_name)"/>
+            </include>
+        </group>
+
+        <!-- Ground Projection -->
+        <group if="$(var /lane_following/ground_projection)">
+            <set_remap from="~/lineseglist_in" to="/$(var veh)/line_detector_node/segment_list"/>
+            <set_remap from="~/camera_info" to="/$(var veh)/camera_node/camera_info"/>
+            <include file="$(find-pkg-share ground_projection)/launch/ground_projection_node.launch.xml">
+                <arg name="veh" value="$(var veh)"/>
+            </include>
+        </group>
+
+        <!-- Lane Filter -->
+        <group if="$(var /lane_following/lane_filter)">
+            <set_remap from="~/segment_list" to="/$(var veh)/ground_projection_node/lineseglist_out"/>
+            <include file="$(find-pkg-share lane_filter)/launch/lane_filter_node.launch.xml">
+                <arg name="veh" value="$(var veh)"/>
+                <arg name="config_file_name" value="$(var lane_filter_param_file_name)"/>
+            </include>
+        </group>
+
+        <!-- Stop Line Filter -->
+        <group if="$(var /lane_following/stop_line_filter)">
+            <set_remap from="~/lane_pose" to="/$(var veh)/lane_filter_node/lane_pose"/>
+            <set_remap from="~/segment_list" to="/$(var veh)/ground_projection_node/lineseglist_out"/>
+            <include file="$(find-pkg-share stop_line_filter)/launch/stop_line_filter_node.launch.xml">
+                <arg name="veh" value="$(var veh)"/>
+                <arg name="config_file_name" value="$(var stop_line_filter_param_file_name)"/>
+            </include>
+        </group>
+    
+        <!-- Lane Controller -->
+        <group if="$(var /lane_following/lane_controller)">
+            <set_remap from="~/lane_pose" to="/$(var veh)/lane_filter_node/lane_pose"/>
+            <set_remap from="~/wheels_cmd" to="/$(var veh)/wheels_driver_node/wheels_cmd"/>
+            <set_remap from="~/obstacle_distance_reading" to="/$(var veh)/road_anomaly_watcher/obstacle_distance"/>
+            <set_remap from="~/stop_line_reading" to="/$(var veh)/stop_line_filter_node/stop_line_reading"/>
+            <include file="$(find-pkg-share lane_control)/launch/lane_controller_node.launch.xml">
+                <arg name="veh" value="$(var veh)"/>
+                <arg name="config_file_name" value="$(var lane_control_param_file_name)"/>
+            </include>
+        </group>
+
+    </group>
+
+    <!-- Anti-instagram -->
+    <group if="$(var anti_instagram)">
+        <set_remap from="/$(var veh)/anti_instagram_node/uncorrected_image/compressed" 
+                to="/$(var veh)/camera_node/image/compressed"/>
+        <include file="$(find-pkg-share anti_instagram)/launch/anti_instagram_node.launch.xml">
+            <arg name="veh" value="$(var veh)"/>
+            <arg name="param_file_name" value="$(var anti_instagram_param_file_name)"/>
+        </include>
+    </group>
+
+</launch>

@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+<launch>
+    <arg name="veh"/>
+    <arg name="demo_name" default="lane_following"/>
+
+    <include file="$(find-pkg-share dt_demos)/common.launch.xml">
+        <arg name="veh" value="$(var veh)"/>
+        <arg name="demo_name" value="$(var demo_name)"/>
+		<!-- <arg name="visualization" value="true"/> -->
+
+	    <!-- Finite state machine -->
+	    <arg name="fsm" value="true"/>
+	    <arg name="fsm_param_file_name" value="fsm_default"/>
+	    <arg name="/fsm/logic_gate" value="false"/>
+	    <arg name="logic_gate_param_file_name" value="logic_gate_default"/>
+
+		<!-- Camera and anti instagram -->
+		<arg name="anti_instagram" value="false" />
+        <arg name="anti_instagram_param_file_name" value="default"/>
+
+	    <!-- Lane Following stack -->
+	    <arg name="lane_following" value="true"/>
+	    <arg name="/lane_following/line_detection" value="true"/>
+	    <arg name="/lane_following/ground_projection" value="true"/>
+	    <arg name="/lane_following/lane_filter" value="true"/>
+        <arg name="/lane_following/stop_line_filter" value="true"/>
+	    <arg name="/lane_following/lane_controller" value="true"/>
+	    <arg name="line_detector_param_file_name" value="default"/>
+        <arg name="lane_filter_param_file_name" value="default"/>
+        <arg name="lane_control_param_file_name" value="default"/>
+
+    </include>
+</launch>
