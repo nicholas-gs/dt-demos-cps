@@ -1,20 +1,22 @@
 <?xml version='1.0'?>
 <launch>
-	<arg name="veh"/>
-    <arg name="demo_name"/> 
+    <arg name="demo_name"/>
+	<arg name="veh" default="$(env ROBOT_NAME)"
+        description="Unique name of the robot. Used as the namespace."/>
     <arg name="robot_type" default="$(env ROBOT_TYPE)"
          description="The type of the robot (e.g., duckiebot, watchtower, traffic_light, ...)"/>
+    <arg name="robot_hardware" default="$(env ROBOT_HARDWARE)"
+        description="The hardware of the robot (e.g., Raspberry Pi, Jetson Nano, ..."/>
     <arg name="robot_configuration" default="$(env ROBOT_CONFIGURATION)"
          description="The configuration of the robot (e.g., DB19, DB20, WT18, ...)"/>
-	<!-- <arg name="config" default="baseline" />
-	<arg name="camera_topic" default="camera_node"/>
-	<arg name="param_file_name" default="default" />
-	<arg name="apriltags_param_file_name" default="$(arg param_file_name)" />
-	<arg name="fsm_file_name" default="$(arg demo_name)" />
-	<arg name="verbose" default="false" />
-	<arg name="ai_trafo_mode" default="cb" doc="'cb' for colo balance only; 'both' for color balance and linear trafo"/>
-	<arg name="ai_interval" default="5" doc="interval with which the linear trafo gets updated. color balance is performed every second."/>
-	<arg name="intersectionType" default= "stopSign"/> -->
+
+    <!-- Hardware drivers settings -->
+    <arg name="use_camera" default="false"/>
+    <arg name="use_imu" default="false"/>
+    <arg name="use_tof" default="false"/>
+    <arg name="use_joystick" default="false"/>
+    <arg name="use_oled_display" default="false"/>
+    <arg name="use_hardware_stats" default="false"/>
 
     <!-- FSM settings-->
     <arg name="fsm" default="false"/>
@@ -38,6 +40,15 @@
     <!-- Anti-instagram settings -->
     <arg name="anti_instagram" default="false"/>
     <arg name="anti_instagram_param_file_name" default="default"/>
+
+    <!-- Hardware drivers stack -->
+    <include file="$(find-pkg-share duckiebot_interface)/launch/all_drivers.launch.xml">
+        <arg name="use_camera" value="$(var use_camera)"/>
+        <arg name="use_imu" value="$(var use_imu)"/>
+        <arg name="use_tof" value="$(var use_tof)"/>
+        <arg name="use_joystick" value="$(var use_joystick)"/>
+        <arg name="use_oled_display" value="$(var use_oled_display)"/>
+    </include>
 
     <!-- FSM stack -->
     <group if="$(var fsm)">

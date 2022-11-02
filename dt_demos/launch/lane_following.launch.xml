@@ -1,12 +1,17 @@
 <?xml version='1.0'?>
 <launch>
-    <arg name="veh"/>
     <arg name="demo_name" default="lane_following"/>
 
     <include file="$(find-pkg-share dt_demos)/common.launch.xml">
-        <arg name="veh" value="$(var veh)"/>
         <arg name="demo_name" value="$(var demo_name)"/>
-		<!-- <arg name="visualization" value="true"/> -->
+
+		<!-- Hardware drivers -->
+	    <arg name="use_camera" value="true"/>
+	    <arg name="use_imu" value="false"/>
+	    <arg name="use_tof" value="false"/>
+	    <arg name="use_joystick" value="false"/>
+	    <arg name="use_oled_display" value="false"/>
+	    <arg name="use_hardware_stats" value="false"/>
 
 	    <!-- Finite state machine -->
 	    <arg name="fsm" value="true"/>
