@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<launch>
+    <arg name="veh"/>
+    <arg name="deadzone" default="0.01"/>
+    <arg name="autorepeat_rate" default="2.0"/>
+    <arg name="coalesce_interval_ms" default="20"/>
+
+    <node pkg="joy" exec="joy_node" name="joy_node" namespace="$(var veh)">
+        <remap from="/$(var veh)/joy" to="/$(var veh)/joy_mapper_node/joy"/>
+        <param name="deadzone" value="$(var deadzone)"/>
+        <param name="autorepeat_rate" value="$(var autorepeat_rate)"/>
+        <param name="coalesce_interval_ms" value="$(var coalesce_interval_ms)"/>
+    </node>
+</launch>
