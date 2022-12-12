@@ -14,7 +14,6 @@
     <arg name="use_camera" default="false"/>
     <arg name="use_imu" default="false"/>
     <arg name="use_tof" default="false"/>
-    <arg name="use_joystick" default="false"/>
     <arg name="use_oled_display" default="false"/>
     <arg name="use_hardware_stats" default="false"/>
 
@@ -46,7 +45,6 @@
         <arg name="use_camera" value="$(var use_camera)"/>
         <arg name="use_imu" value="$(var use_imu)"/>
         <arg name="use_tof" value="$(var use_tof)"/>
-        <arg name="use_joystick" value="$(var use_joystick)"/>
         <arg name="use_oled_display" value="$(var use_oled_display)"/>
     </include>
 

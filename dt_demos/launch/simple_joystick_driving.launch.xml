@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<launch>
+    <arg name="veh" default="$(env ROBOT_NAME)"
+        description="Unique name of the robot. Used as the namespace."/>
+    <arg name="robot_type" default="$(env ROBOT_TYPE)"
+         description="The type of the robot (e.g., duckiebot, watchtower, traffic_light, ...)"/>
+    <arg name="robot_hardware" default="$(env ROBOT_HARDWARE)"
+        description="The hardware of the robot (e.g., Raspberry Pi, Jetson Nano, ..."/>
+    <arg name="robot_configuration" default="$(env ROBOT_CONFIGURATION)"
+         description="The configuration of the robot (e.g., DB19, DB20, WT18, ...)"/>
+
+    <!-- Launch minimal hardware drivers -->
+    <include file="$(find-pkg-share duckiebot_interface)/all_drivers.launch.xml">
+        <arg name="veh" value="$(var veh)"/>
+        <arg name="robot_type" value="$(var robot_type)"/>
+        <arg name="robot_hardware" value="$(var robot_hardware)"/>
+        <arg name="robot_configuration" value="$(var robot_configuration)"/>
+
+        <arg name="use_camera" default="false"/>
+        <arg name="use_imu" default="false"/>
+        <arg name="use_tof" default="false"/>
+        <arg name="use_oled_display" default="false"/>
+        <arg name="use_battery_health" default="false"/>
+        <arg name="use_hardware_stats" default="false"/>
+    </include>
+
+    <!-- Launch kinematics and joy_mapper node -->
+    <include file="$(find-pkg-share car_interface)/launch/all.launch.xml">
+        <arg name="veh" value="$(var veh)"/>
+        <arg name="use_velocity_to_pose_node" value="false"/>
+        <arg name="use_cmd_switch_node" value="false"/>
+        <arg name="use_joy_mapper_node" value="true"/>
+    </include>
+
+</launch>

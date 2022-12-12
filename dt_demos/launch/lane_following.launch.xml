@@ -9,7 +9,6 @@
 	    <arg name="use_camera" value="true"/>
 	    <arg name="use_imu" value="false"/>
 	    <arg name="use_tof" value="false"/>
-	    <arg name="use_joystick" value="false"/>
 	    <arg name="use_oled_display" value="false"/>
 	    <arg name="use_hardware_stats" value="false"/>
 
