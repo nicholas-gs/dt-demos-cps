@@ -10,18 +10,18 @@
          description="The configuration of the robot (e.g., DB19, DB20, WT18, ...)"/>
 
     <!-- Launch minimal hardware drivers -->
-    <include file="$(find-pkg-share duckiebot_interface)/all_drivers.launch.xml">
+    <include file="$(find-pkg-share duckiebot_interface)/launch/all_drivers.launch.xml">
         <arg name="veh" value="$(var veh)"/>
         <arg name="robot_type" value="$(var robot_type)"/>
         <arg name="robot_hardware" value="$(var robot_hardware)"/>
         <arg name="robot_configuration" value="$(var robot_configuration)"/>
 
-        <arg name="use_camera" default="false"/>
-        <arg name="use_imu" default="false"/>
-        <arg name="use_tof" default="false"/>
-        <arg name="use_oled_display" default="false"/>
-        <arg name="use_battery_health" default="false"/>
-        <arg name="use_hardware_stats" default="false"/>
+        <arg name="use_camera" value="false"/>
+        <arg name="use_imu" value="false"/>
+        <arg name="use_tof" value="false"/>
+        <arg name="use_oled_display" value="false"/>
+        <arg name="use_battery_health" value="false"/>
+        <arg name="use_hardware_stats" value="false"/>
     </include>
 
     <!-- Launch kinematics and joy_mapper node -->
