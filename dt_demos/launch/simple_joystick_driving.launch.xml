@@ -16,12 +16,16 @@
         <arg name="robot_hardware" value="$(var robot_hardware)"/>
         <arg name="robot_configuration" value="$(var robot_configuration)"/>
 
-        <arg name="use_camera" value="false"/>
-        <arg name="use_imu" value="false"/>
-        <arg name="use_tof" value="false"/>
-        <arg name="use_oled_display" value="false"/>
         <arg name="use_battery_health" value="false"/>
         <arg name="use_hardware_stats" value="false"/>
+        <!-- Only need the wheel drivers -->
+        <arg name="use_wheel_drivers" value="true"/>
+        <arg name="use_wheel_encoders" value="false"/>
+        <arg name="use_camera" value="false"/>
+        <arg name="use_button" value="false"/>
+        <arg name="use_oled_display" value="false"/>
+        <arg name="use_imu" value="false"/>
+        <arg name="use_tof" value="false"/>
     </include>
 
     <!-- Launch kinematics and joy_mapper node -->

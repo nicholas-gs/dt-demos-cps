@@ -10,7 +10,7 @@ amount of packages required are used.
 On the duckiebot,
 
 ```bash
-ros2 launch simple_joystick_driving.launch.xml
+ros2 launch dt_demos simple_joystick_driving.launch.xml
 ```
 
 On your computer/duckiebot where your game controller is attached to, run
