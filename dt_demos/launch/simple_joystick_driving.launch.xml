@@ -31,6 +31,7 @@
     <!-- Launch kinematics and joy_mapper node -->
     <include file="$(find-pkg-share car_interface)/launch/all.launch.xml">
         <arg name="veh" value="$(var veh)"/>
+        <arg name="use_kinematics_node" value="true"/>
         <arg name="use_velocity_to_pose_node" value="false"/>
         <arg name="use_cmd_switch_node" value="false"/>
         <arg name="use_joy_mapper_node" value="true"/>

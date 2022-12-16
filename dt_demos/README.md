@@ -23,6 +23,19 @@ Requires the `joy` package that can be found in the [joystick_drivers](https://g
 
 Double check that the `joy` topic is remapped so that the `joy_mapper_node` receives the published messages. 
 
+### 2. __lane_following__
+
+On the duckiebot:
+
+```bash
+ros2 launch dt_demos lane_following.launch.xml
+```
+
+Visualize the lane detection video stream using `rqt_image_view`.
+
+Below shows the nodes and topics
+![](readme-images/lane_following_rosgraph.png)
+
 ## Credits
 
 * https://github.com/duckietown/dt-core/tree/daffy/packages/duckietown_demos

@@ -5,31 +5,35 @@
     <include file="$(find-pkg-share dt_demos)/common.launch.xml">
         <arg name="demo_name" value="$(var demo_name)"/>
 
-		<!-- Hardware drivers -->
-	    <arg name="use_camera" value="true"/>
-	    <arg name="use_imu" value="false"/>
-	    <arg name="use_tof" value="false"/>
-	    <arg name="use_oled_display" value="false"/>
-	    <arg name="use_hardware_stats" value="false"/>
+        <!-- Hardware drivers -->
+        <arg name="use_battery_health" value="false"/>
+        <arg name="use_hardware_stats" value="false"/>
+        <arg name="use_wheel_drivers" value="true"/>
+        <arg name="use_wheel_encoders" value="false"/>
+        <arg name="use_camera" value="true"/>
+        <arg name="use_button" value="false"/>
+        <arg name="use_oled_display" value="false"/>
+        <arg name="use_imu" value="false"/>
+        <arg name="use_tof" value="false"/>
+        <arg name="use_leds" value="false"/>
 
-	    <!-- Finite state machine -->
-	    <arg name="fsm" value="true"/>
-	    <arg name="fsm_param_file_name" value="fsm_default"/>
-	    <arg name="/fsm/logic_gate" value="false"/>
-	    <arg name="logic_gate_param_file_name" value="logic_gate_default"/>
+        <!-- Car interface -->
+        <arg name="use_kinematics_node" value="true"/>
+        <arg name="use_velocity_to_pose_node" value="false"/>
+        <arg name="use_cmd_switch_node" value="false"/>
+        <arg name="use_joy_mapper_node" value="false"/>
 
-		<!-- Camera and anti instagram -->
-		<arg name="anti_instagram" value="false" />
-        <arg name="anti_instagram_param_file_name" value="default"/>
+        <!-- Camera and anti instagram -->
+        <arg name="anti_instagram" value="true"/>
 
-	    <!-- Lane Following stack -->
-	    <arg name="lane_following" value="true"/>
-	    <arg name="/lane_following/line_detection" value="true"/>
-	    <arg name="/lane_following/ground_projection" value="true"/>
-	    <arg name="/lane_following/lane_filter" value="true"/>
-        <arg name="/lane_following/stop_line_filter" value="true"/>
-	    <arg name="/lane_following/lane_controller" value="true"/>
-	    <arg name="line_detector_param_file_name" value="default"/>
+        <!-- Lane Following stack -->
+        <arg name="lane_following" value="true"/>
+        <arg name="lane_following/line_detection" value="true"/>
+        <arg name="lane_following/ground_projection" value="true"/>
+        <arg name="lane_following/lane_filter" value="true"/>
+        <arg name="lane_following/stop_line_filter" value="false"/>
+        <arg name="lane_following/lane_controller" value="true"/>
+        <arg name="line_detector_param_file_name" value="default"/>
         <arg name="lane_filter_param_file_name" value="default"/>
         <arg name="lane_control_param_file_name" value="default"/>
 
