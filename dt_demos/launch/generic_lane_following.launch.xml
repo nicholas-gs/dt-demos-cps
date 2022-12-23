@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<launch>
+    <arg name="demo_name" default="generic_lane_following"/>
+    <arg name="veh" default="$(env ROBOT_NAME)"
+        description="Unique name of the robot. Used as the namespace."/>
+    
+    <arg name="use_fake_camera" default="false"/>
+    <arg name="fake_camera_type"/>
+    <arg name="fake_camera_path"/>
+
+    <group if="$(var use_fake_camera)">
+        <!-- Launch the `fake_camera` node -->
+        <push-ros-namespace namespace="$(var veh)"/>
+        <include file="$(find-pkg-share dt_fake_camera)/launch/fake_camera_node.launch.xml">
+            <arg name="type" value="$(var fake_camera_type)"/>
+            <arg name="path" value="$(var fake_camera_path)"/>
+            <arg name="loop" value="true"/>
+        </include>
+    </group>
+
+    <group if="$(var use_fake_camera)">
+        <!-- Launch the `generic_line_detector_node` and remap its topic to
+            read its video input from the `fake_camera`  -->
+        <set_remap from="~/image/compressed" to="/$(var veh)/fake_camera_node/image/compressed"/>
+        <include file="$(find-pkg-share generic_line_detector)/launch/generic_line_detector_node.launch.xml">
+            <arg name="veh" value="$(var veh)"/>
+        </include>
+    </group>
+
+</launch>

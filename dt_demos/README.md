@@ -36,6 +36,14 @@ Visualize the lane detection video stream using `rqt_image_view`.
 Below shows the nodes and topics
 ![](readme-images/lane_following_rosgraph.png)
 
+
+### 3. __generic_lane_following__
+
+>_To Be Completed_
+
+A simpler lane following demo that works on two lane markings. Unlike the full lane following demo, the lane markings can be any color as the lane detection is done in grayscale. Based off [here](https://towardsdatascience.com/deeppicar-part-4-lane-following-via-opencv-737dd9e47c96) and [here](https://medium.com/@SunEdition/lane-detection-and-turn-prediction-algorithm-for-autonomous-vehicles-6423f77dc841).
+
+
 ## Credits
 
 * https://github.com/duckietown/dt-core/tree/daffy/packages/duckietown_demos
