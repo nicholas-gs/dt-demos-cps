@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>dt_ood_cps</name>
+  <version>1.0.0</version>
+  <description>Package containing nodes and utility scripts relating to the
+    Out-of-Distribution detector.
+  </description>
+  <maintainer email="nicholasganshyan@gmail.com">nicholas-gs</maintainer>
+  <license>GPLv3</license>
+
+  <depend>rclpy</depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+
+  <exec_depend>dt_ood_interfaces_cps</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
