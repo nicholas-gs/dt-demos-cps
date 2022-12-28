@@ -43,6 +43,28 @@ Below shows the nodes and topics
 
 A simpler lane following demo that works on two lane markings. Unlike the full lane following demo, the lane markings can be any color as the lane detection is done in grayscale. Based off [here](https://towardsdatascience.com/deeppicar-part-4-lane-following-via-opencv-737dd9e47c96) and [here](https://medium.com/@SunEdition/lane-detection-and-turn-prediction-algorithm-for-autonomous-vehicles-6423f77dc841).
 
+### 4. __vision_pipeline__
+
+Similar to the `lane_following` demo, but without any of the hardware. Only uses the computer vision nodes, with a video streamer to minic the actual camera. For example,
+
+```bash
+ros2 launch dt_demos vision_pipeline.launch.xml src_type:=<image or video> src_path:=<path to file>
+```
+
+<p float="left">
+  <img src="readme-images/vision_pipeline_raw.png" width="180" />
+  <img src="readme-images/vision_pipeline_canny.png" width="200" /> 
+  <img src="readme-images/vision_pipeline_hough.png" width="200" />
+</p>
+
+
+### 5. __generic_vision_pipeline__
+
+Similar to the `generic_lane_following` demo, but without any of the hardware. Only uses the computer vision nodes, with a video streamer to minic the actual camera. For example,
+
+```bash
+ros2 launch dt_demos generic_vision_pipeline.launch.xml src_type:=<image or video> src_path:=<path to file>
+```
 
 ## Credits
 
