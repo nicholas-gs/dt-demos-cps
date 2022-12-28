@@ -22,6 +22,18 @@
     <arg name="use_tof" default="false"/>
     <arg name="use_leds" default="false"/>
 
+    <!-- Fake camera settings -->
+    <arg name="use_fake_camera" default="false"
+        description="Launch the fake camera instead of using the real camera;
+            should NOT use both cameras at the same time!"/>
+    <arg name="fake_camera_type" default=""
+        description="The type of content to publish (e.g., image or video)"/>
+    <arg name="fake_camera_path" default=""
+        description="The absolute path to the content to publish."/>
+
+    <!-- OoD detector settings -->
+    <arg name="ood_detector" default="false"/>
+
     <!-- Car interface settings -->
     <arg name="use_kinematics_node" default="false"/>
     <arg name="use_velocity_to_pose_node" default="false"/>
@@ -34,16 +46,20 @@
 
     <!-- Lane following stack settings-->
     <arg name="lane_following" default="false"/>
-    <arg name="/lane_following/line_detection" default="false"/>
-    <arg name="/lane_following/ground_projection" default="false"/>
-    <arg name="/lane_following/lane_filter" default="false"/>
-    <arg name="/lane_following/stop_line_filter" default="false"/>
-    <arg name="/lane_following/lane_controller" default="false"/>
+    <arg name="lane_following/line_detection" default="false"/>
+    <arg name="lane_following/ground_projection" default="false"/>
+    <arg name="lane_following/lane_filter" default="false"/>
+    <arg name="lane_following/stop_line_filter" default="false"/>
+    <arg name="lane_following/lane_controller" default="false"/>
 	<arg name="line_detector_param_file_name" default="default"/>
 	<arg name="ground_projection_param_file_name" default="default"/>
     <arg name="lane_filter_param_file_name" default="default"/>
     <arg name="stop_line_filter_param_file_name" default="default"/>
     <arg name="lane_control_param_file_name" default="default"/>
+
+    <!-- Generic lane following stack settings -->
+    <arg name="generic_lane_following" default="false"/>
+    <arg name="generic_lane_following/line_detection" default="false"/>
 
     <!-- Hardware drivers stack -->
     <include file="$(find-pkg-share duckiebot_interface)/launch/all_drivers.launch.xml">
@@ -56,7 +72,22 @@
         <arg name="use_oled_display" value="$(var use_oled_display)"/>
         <arg name="use_imu" value="$(var use_imu)"/>
         <arg name="use_tof" value="$(var use_tof)"/>
+        <arg name="use_leds" value="$(var use_leds)"/>
     </include>
+
+    <!-- Fake camera stack -->
+    <group if="$(var use_fake_camera)">
+        <push-ros-namespace namespace="$(var veh)"/>
+        <include file="$(find-pkg-share ros2_video_streamer)/launch/ros2_video_streamer_node.launch.xml">
+            <arg name="node_name" value="camera_node"/>
+            <arg name="config_file_name" value="duckiebot_camera"/>
+            <arg name="loop" value="true"/>
+            <arg name="frame_id" value="$(var veh)/camera_optical_frame"/>
+            <arg name="type" value="$(var fake_camera_type)"/>
+            <arg name="path" value="$(var fake_camera_path)"/>
+            <arg name="start" value="0"/>
+        </include>
+    </group>
 
     <!-- Car interface stack -->
     <include file="$(find-pkg-share car_interface)/launch/all.launch.xml">
@@ -77,6 +108,15 @@
         </include>
     </group>
 
+    <!-- Out-of-Distribution stack -->
+    <group if="$(var ood_detector)">
+        <!-- Input for OoD node is the line_detector node -->
+        <set_remap from="~/ood_input" to="/$(var veh)/line_detector_node/ood_input"/>
+        <include file="$(find-pkg-share ood_detector)/launch/ood_detector_node.launch.xml">
+            <arg name="veh" value="$(var veh)"/>
+        </include>
+    </group>
+
     <!-- Lane following stack -->
     <group if="$(var lane_following)">
         <!-- Line/Lane Detector-->
@@ -91,11 +131,19 @@
 
         <!-- Ground Projection -->
         <group if="$(var lane_following/ground_projection)">
-            <set_remap from="~/lineseglist_in" to="/$(var veh)/line_detector_node/segment_list"/>
             <set_remap from="~/camera_info" to="/$(var veh)/camera_node/camera_info"/>
-            <include file="$(find-pkg-share ground_projection)/launch/ground_projection_node.launch.xml">
-                <arg name="veh" value="$(var veh)"/>
-            </include>
+            <group unless="$(var ood_detector)">
+                <set_remap from="~/lineseglist_in" to="/$(var veh)/line_detector_node/segment_list"/>
+                <include file="$(find-pkg-share ground_projection)/launch/ground_projection_node.launch.xml">
+                    <arg name="veh" value="$(var veh)"/>
+                </include>
+            </group>
+            <group if="$(var ood_detector)">
+                <set_remap from="~/lineseglist_in" to="/$(var veh)/ood_detector_node/ood_segment_list"/>
+                <include file="$(find-pkg-share ground_projection)/launch/ground_projection_node.launch.xml">
+                    <arg name="veh" value="$(var veh)"/>
+                </include>
+            </group>
         </group>
 
         <!-- Lane Filter -->
@@ -133,6 +181,17 @@
             </include>
         </group>
 
+    </group>
+
+    <!-- Generic lane following stack -->
+    <group if="$(var generic_lane_following)">
+        <!-- Line/Lane Detector-->
+        <group if="$(var generic_lane_following/line_detection)">
+            <set_remap from="~/image/compressed" to="/$(var veh)/camera_node/image/compressed"/>
+            <include file="$(find-pkg-share generic_line_detector)/launch/generic_line_detector_node.launch.xml">
+                <arg name="veh" value="$(var veh)"/>
+            </include> -->
+        </group>
     </group>
 
 </launch>

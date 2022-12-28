@@ -1,0 +1,57 @@
+<?xml version='1.0'?>
+<launch>
+    <arg name="demo_name" default="vision_pipeline"/>
+
+    <arg name="use_fake_camera" default="true"/>
+    <arg name="src_type" default=""
+        description="The type of content to publish (e.g., image or video)"/>
+    <arg name="src_path" default=""
+        description="The absolute path to the content to publish."/>
+    <arg name="ood_detector" default="false"
+        description="Use Out-of-Distribution detector"/>
+
+    <include file="$(find-pkg-share dt_demos)/common.launch.xml">
+        <arg name="demo_name" value="$(var demo_name)"/>
+
+        <!-- Disable all hardware drivers -->
+        <arg name="use_battery_health" value="false"/>
+        <arg name="use_hardware_stats" value="false"/>
+        <arg name="use_wheel_drivers" value="false"/>
+        <arg name="use_wheel_encoders" value="false"/>
+        <arg name="use_camera" value="false"/>
+        <arg name="use_button" value="false"/>
+        <arg name="use_oled_display" value="false"/>
+        <arg name="use_imu" value="false"/>
+        <arg name="use_tof" value="false"/>
+        <arg name="use_leds" value="false"/>
+
+        <!-- Use fake camera -->
+        <arg name="use_fake_camera" value="$(var use_fake_camera)"/>
+        <arg name="fake_camera_type" value="$(var src_type)"/>
+        <arg name="fake_camera_path" value="$(var src_path)"/>
+
+        <!-- Use OoD Detector -->
+        <arg name="ood_detector" value="$(var ood_detector)"/>
+
+        <!-- Camera and anti instagram -->
+        <arg name="anti_instagram" value="true"/>
+
+        <!-- Car interface -->
+        <arg name="use_kinematics_node" value="false"/>
+        <arg name="use_velocity_to_pose_node" value="false"/>
+        <arg name="use_cmd_switch_node" value="false"/>
+        <arg name="use_joy_mapper_node" value="false"/>
+
+        <!-- Lane Following stack -->
+        <arg name="lane_following" value="true"/>
+        <arg name="lane_following/line_detection" value="true"/>
+        <arg name="lane_following/ground_projection" value="true"/>
+        <arg name="lane_following/lane_filter" value="false"/>
+        <arg name="lane_following/stop_line_filter" value="false"/>
+        <arg name="lane_following/lane_controller" value="false"/>
+
+        <!-- Generic lane following stack -->
+        <arg name="generic_lane_following" value="false"/>
+    </include>
+
+</launch>
