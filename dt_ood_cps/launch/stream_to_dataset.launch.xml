@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<launch>
+    <arg name="export_bin" description="Directory to export created dataset"/>
+    <arg name="crop_type" default="bin"
+        description="Defines how to extract each crop to create the dataset (e.g. 'passthrough', 'fit', 'bin', 'trim')"/>
+    <arg name="dimensions" default="[32,64,128]"
+        description="Dimension of the output image, only relevant if 'crop_type' is 'bin' or 'crop'."/>
+    <arg name="thickness" default="2"
+        description="Thickness of the cropped segments"/>
+
+    <node pkg="dt_ood_cps" exec="stream_to_dataset_node" name="stream_to_dataset_node">
+        <param name="export_bin" value="$(var export_bin)"/>
+        <param name="crop_type" value="$(var crop_type)"/>
+        <param name="dimensions" value="$(var dimensions)"/>
+        <param name="thickness" value="$(var thickness)"/>
+    </node>
+</launch>
