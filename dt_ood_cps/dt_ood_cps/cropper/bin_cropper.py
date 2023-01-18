@@ -28,9 +28,7 @@ class BinCropper(ISegmentCropper):
         super().__init__(thickness, **kwargs)
         _bins: List[Tuple[int,int]] = kwargs["bins"]
 
-        assert(len(_bins) > 1)
-        if len(_bins) <= 1:
-            raise ValueError("Number of bins must be greater than 1")
+        assert(len(_bins) >= 1)
         for bin in _bins:
             # Assume square images
             if bin[0] != bin[1]:

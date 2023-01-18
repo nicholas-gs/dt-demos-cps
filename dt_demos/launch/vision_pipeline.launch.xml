@@ -2,7 +2,7 @@
 <launch>
     <arg name="demo_name" default="vision_pipeline"/>
 
-    <arg name="use_fake_camera" default="true"/>
+    <arg name="use_fake_camera" default="false"/>
     <arg name="src_type" default=""
         description="The type of content to publish (e.g., image or video)"/>
     <arg name="src_path" default=""
@@ -37,7 +37,7 @@
         <arg name="anti_instagram" value="true"/>
 
         <!-- Car interface -->
-        <arg name="use_kinematics_node" value="false"/>
+        <arg name="use_kinematics_node" value="true"/>
         <arg name="use_velocity_to_pose_node" value="false"/>
         <arg name="use_cmd_switch_node" value="false"/>
         <arg name="use_joy_mapper_node" value="false"/>
@@ -46,9 +46,12 @@
         <arg name="lane_following" value="true"/>
         <arg name="lane_following/line_detection" value="true"/>
         <arg name="lane_following/ground_projection" value="true"/>
-        <arg name="lane_following/lane_filter" value="false"/>
+        <arg name="lane_following/lane_filter" value="true"/>
         <arg name="lane_following/stop_line_filter" value="false"/>
-        <arg name="lane_following/lane_controller" value="false"/>
+        <arg name="lane_following/lane_controller" value="true"/>
+        <arg name="line_detector_param_file_name" value="default"/>
+        <arg name="lane_filter_param_file_name" value="default"/>
+        <arg name="lane_control_param_file_name" value="default"/>
 
         <!-- Generic lane following stack -->
         <arg name="generic_lane_following" value="false"/>
