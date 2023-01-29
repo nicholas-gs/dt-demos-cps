@@ -25,6 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'keyboard_control_node=dt_demo_keyboard.keyboard_control:main',
+            'lane_following_control_node=dt_demo_keyboard.lane_following_control:main'
         ],
     },
 )

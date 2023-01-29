@@ -170,7 +170,7 @@
         <!-- Lane Controller -->
         <group if="$(var lane_following/lane_controller)">
             <!-- Send `car_cmd` to the kinematic node -->
-            <set_remap from="~/car_cmd" to="/$(var veh)/kinematics_node/car_cmd"/>
+            <set_remap from="~/car_cmd" to="/$(var veh)/gatekeeper_node/in_car_cmd"/>
             <set_remap from="~/lane_pose" to="/$(var veh)/lane_filter_node/lane_pose"/>
             <set_remap from="~/wheels_cmd" to="/$(var veh)/wheels_driver_node/wheels_cmd"/>
             <set_remap from="~/obstacle_distance_reading" to="/$(var veh)/road_anomaly_watcher/obstacle_distance"/>

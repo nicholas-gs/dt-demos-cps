@@ -60,6 +60,20 @@ On the duckiebot:
 ros2 launch dt_demos lane_following.launch.xml
 ```
 
+Start the lane following by running on your computer:
+
+```bash
+ros2 run dt_demo_keyboard lane_following_control_node --ros-args -p veh:=<robot name>
+
+# You should see the following printed out:
+
+# Start and stop lane following on the Duckiebot.
+# ---------------------------
+# a : Start lane following
+# s : Stop lane following
+# CTRL-C to quit
+```
+
 Visualize the lane detection video stream using `rqt_image_view`.
 
 ### 4. __Vision Pipeline__
