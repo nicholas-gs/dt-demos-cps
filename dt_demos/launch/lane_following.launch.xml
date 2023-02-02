@@ -1,6 +1,8 @@
 <?xml version='1.0'?>
 <launch>
     <arg name="demo_name" default="lane_following"/>
+    <arg name="ood_detector" default="false"
+        description="Use Out-of-Distribution detector"/>
 
     <include file="$(find-pkg-share dt_demos)/common.launch.xml">
         <arg name="demo_name" value="$(var demo_name)"/>
@@ -22,9 +24,13 @@
         <arg name="use_velocity_to_pose_node" value="false"/>
         <arg name="use_cmd_switch_node" value="false"/>
         <arg name="use_joy_mapper_node" value="false"/>
+        <arg name="default_passthrough" value="false"/>
 
         <!-- Camera and anti instagram -->
         <arg name="anti_instagram" value="true"/>
+
+        <!-- Out-of-Distribution detector -->
+        <arg name="ood_detector" value="$(var ood_detector)"/>
 
         <!-- Lane Following stack -->
         <arg name="lane_following" value="true"/>

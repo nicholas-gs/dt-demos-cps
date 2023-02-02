@@ -41,6 +41,7 @@
         <arg name="use_velocity_to_pose_node" value="false"/>
         <arg name="use_cmd_switch_node" value="false"/>
         <arg name="use_joy_mapper_node" value="false"/>
+        <arg name="default_passthrough" value="true"/>
 
         <!-- Lane Following stack -->
         <arg name="lane_following" value="true"/>

@@ -39,6 +39,7 @@
     <arg name="use_velocity_to_pose_node" default="false"/>
     <arg name="use_cmd_switch_node" default="false"/>
     <arg name="use_joy_mapper_node" default="false"/>
+    <arg name="default_passthrough" default="false"/>
 
     <!-- Anti-instagram settings -->
     <arg name="anti_instagram" default="false"/>
@@ -96,6 +97,7 @@
         <arg name="use_velocity_to_pose_node" value="$(var use_velocity_to_pose_node)"/>
         <arg name="use_cmd_switch_node" value="$(var use_cmd_switch_node)"/>
         <arg name="use_joy_mapper_node" value="$(var use_joy_mapper_node)"/>
+        <arg name="default_passthrough" value="$(var default_passthrough)"/>
     </include>
 
     <!-- Anti-instagram stack -->
