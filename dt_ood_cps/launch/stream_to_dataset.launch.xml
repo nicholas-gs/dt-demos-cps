@@ -1,6 +1,8 @@
 <?xml version='1.0'?>
 <launch>
     <arg name="export_bin" description="Directory to export created dataset"/>
+    <arg name="single_frame" default="false"
+        description="Crop only the first frame received"/>
     <arg name="crop_type" default="bin"
         description="Defines how to extract each crop to create the dataset (e.g. 'passthrough', 'fit', 'bin', 'trim')"/>
     <arg name="dimensions" default="[32,64,128]"
@@ -10,6 +12,7 @@
 
     <node pkg="dt_ood_cps" exec="stream_to_dataset_node" name="stream_to_dataset_node">
         <param name="export_bin" value="$(var export_bin)"/>
+        <param name="single_frame" value="$(var single_frame)"/>
         <param name="crop_type" value="$(var crop_type)"/>
         <param name="dimensions" value="$(var dimensions)"/>
         <param name="thickness" value="$(var thickness)"/>

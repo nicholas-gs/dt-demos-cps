@@ -49,7 +49,7 @@ class StreamToDatasetNode(Node):
         self._export_dir = self.create_export_dir(self._export_bin)
 
         # Counter to keep track of image received
-        self.img_counter = 1
+        self.img_counter = 0
 
         # Debug variables for keeping track of the maximum width and height
         # of the received segments/lines.
@@ -70,6 +70,7 @@ class StreamToDatasetNode(Node):
             dimens_debug_str += f"{dimen[0]}x{dimen[1]}, "
         self.get_logger().info(f"Initialized with: \
 export_bin: {self._export_bin}, \
+single_frame: {self._single_frame}, \
 crop_type: {self._crop_type}, \
 dimensions: {dimens_debug_str}, \
 thickness: {self._thickness}")
@@ -81,12 +82,15 @@ thickness: {self._thickness}")
 
     def load_launch_parameters(self):
         self.declare_parameter("export_bin")
+        self.declare_parameter("single_frame")
         self.declare_parameter("crop_type")
         self.declare_parameter("dimensions")
         self.declare_parameter("thickness")
 
         self._export_bin = self.get_parameter("export_bin")\
             .get_parameter_value().string_value
+        self._single_frame = self.get_parameter("single_frame")\
+            .get_parameter_value().bool_value
         self._crop_type = self.get_parameter("crop_type")\
             .get_parameter_value().string_value
         _dimens = self.get_parameter("dimensions")\
@@ -123,8 +127,12 @@ thickness: {self._thickness}")
         return random_dir
 
     def cb_ood_input(self, msg: DetectorInput):
+        self.img_counter += 1
         if self.img_counter == 1:
             self.get_logger().info("Received first image!")
+        # Don't process message if only single frame is specified
+        if self._single_frame and self.img_counter > 1:
+            return
         uncompressed_img = self.bridge.compressed_imgmsg_to_cv2(
             msg.frame, "bgr8")
         lines, color_ids = StreamToDatasetNode._extract_lines(msg.lines)
@@ -142,7 +150,6 @@ thickness: {self._thickness}")
                 cropped_shape = cropped_img.shape
                 cropped_height = cropped_shape[0]
                 cropped_width = cropped_shape[1]
-                idx = self._dimensions.index((cropped_height, cropped_width))
 
                 file_path = os.path.join(
                     self._export_dir,
@@ -153,8 +160,11 @@ thickness: {self._thickness}")
                     self._export_dir, f"{self.img_counter}_{idx}.png")
 
             cv2.imwrite(file_path, cropped_img)
-
-        self.img_counter += 1
+        
+        if self.img_counter == 1 and self._single_frame:
+            self.get_logger().warn("Only cropping single frame, \
+terminating node")
+            raise SystemError
 
     @staticmethod
     def _get_line_dimension(line) -> Tuple[int, int]:
@@ -193,6 +203,8 @@ def main(args=None):
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
+        pass
+    except SystemError:
         pass
     finally:
         node.cleanup()
