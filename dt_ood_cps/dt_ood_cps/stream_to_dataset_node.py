@@ -75,7 +75,7 @@ crop_type: {self._crop_type}, \
 dimensions: {dimens_debug_str}, \
 thickness: {self._thickness}")
 
-        if self._crop_type not in ["bin", "crop"] and len(self._dimensions) > 0:
+        if self._crop_type not in ["bin", "trim"] and len(self._dimensions) > 0:
             self.get_logger().warn(
                 f"Ignoring given dimensions with crop type \
 '{self._crop_type}'")
