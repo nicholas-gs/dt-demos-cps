@@ -114,6 +114,7 @@
     <group if="$(var ood_detector)">
         <!-- Input for OoD node is the line_detector node -->
         <set_remap from="~/ood_input" to="/$(var veh)/line_detector_node/ood_input"/>
+        <set_remap from="~/ood_alert" to="/$(var veh)/gatekeeper_node/ood_alert"/>
         <include file="$(find-pkg-share ood_detector)/launch/ood_detector_node.launch.xml">
             <arg name="veh" value="$(var veh)"/>
         </include>
